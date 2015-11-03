@@ -1,9 +1,16 @@
+
+#first attempt at PCA
+#PCA by way of Singular Value Decomposition (SVD). This calculates 
+#the covariance matrix and takes eigenvectors and eigenvalues of the 
+#reshaped covariance matrix
+
+
 import numpy as numpy
 import matplotlib.pyplot as plt 
 import numpy.linalg as npl
 
 
-def pca_1(data, dims_rescaled_data = 2):
+def pca_1(data, dims_rescaled_data = 2): #parameter value can be any value less than col # of data array
 	"""
 	Returns a data transformed in 2 dims/columns and our
 	original data
@@ -14,6 +21,7 @@ def pca_1(data, dims_rescaled_data = 2):
 
 	Returns
 	-------
+	eigenvectors and eigenvalues of the covariance matrix
 
 	"""
 	m, n = data.shape
@@ -40,3 +48,7 @@ def pca_2((data, pc_count = None):
 	----------
 	passes in: data in 2D numpy array
 	"""
+	data -= mean(data, 0)
+	data /= std(data, 0)
+	C = cov(data)
+	E, V =  
