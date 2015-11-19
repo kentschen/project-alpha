@@ -90,11 +90,48 @@ print(variances)
 
 #################################
 #some plotting
-fig = plt.figure()
-ax = fig.add_subplot
-colors = ['blue','red','black']
-for i in xrange(samples):
-ax.scatter(newdata2[i,0],newdata2[i,1], color= colors[int(data[i,-1])])
-plt.xlabel('SVD1')
-plt.ylabel('SVD2')
-plt.show()
+vol_shape = data.shape[:-1]
+n_trs = data.shape[-1]
+vol_shape, n_trs
+
+#mean volume (over time)
+mean_vol = np.mean(data, axis=-1)
+plt.hist(np.ravel(mean_vol), bins=100)
+
+#setting threshold to identify voxels in the brain
+in_brain_mask = mean_vol > 600
+in_brain_mask.shape
+
+#using 3D mask to index 4D dataset
+in_brain_tcs = data[in_brain_mask, :]
+in_brain_tcs.shape
+
+Y = in_brain_tcs.T
+
+
+#Looking for patterns of noise via PCA
+Y_demeaned = Y - np.mean(Y, axis=1).reshape([-1, 1])
+unscaled_cov = Y_demeaned.dot(Y_demeaned.T)
+U, S, V = npl.svd(unscaled_cov)
+
+#U matrix represents the component matrix
+plt.plot(U[:, 0])
+
+#projection of data onto new basis of U
+projections = U.T.dot(Y_demeaned)
+projections.shape
+
+#projection back into correct 3D location via mask
+projection_vols = np.zeros(data.shape)
+projection_vols[in_brain_mask, :] = projections.T
+
+#first component
+plt.imshow(projection_vols[:, :, 14, 0])
+
+#second compoennt
+plt.plot(U[:, 1])
+plt.imshow(projection_vols[:, :, 14, 1])
+
+#third component
+plt.plot(U[:, 2])
+plt.imshow(projection_vols[:, :, 14, 2])

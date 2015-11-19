@@ -3,6 +3,7 @@ Run with:
     nosetests test_pca.py
 """
 
+#Loading modules
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,19 +15,18 @@ from PCA import PCA
 from numpy.testing import assert_almost_equal, assert_array_equal
 
 
-
 # Path to the subject 009 fMRI data used in class. 
-# Assume that this is in the data directory for our project, 
-# in a directory called 'ds114'. 
-pathtoclassdata = "../../../data/ds114/"
+pathtoclassdata = "data/ds114/"
 
-
-#sys.path.append(os.path.join(os.path.dirname(__file__), "..", "functions"))
-sys.path.append("../functions/")
+# Add path to functions to the system path.
+sys.path.append(os.path.join(os.path.dirname(__file__), "../functions/"))
 
 
 def test_pca():
     """PCA on dense arrays"""
+    img = nib.load(pathtoclassdata + "ds114_sub009_t2r1.nii")
+    data = img.get_data()[..., 4:]
+     
     pca = PCA(n_components=2)
     X = pathtoclassdata
     X_r = pca.fit(X).transform(X)

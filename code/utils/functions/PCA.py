@@ -16,8 +16,8 @@ from numpy.linalg import svd
 
 #Preprocessing
 #normalize and remove mean
-data = mat(log10(data[:,:4]))
-N = 2
+#data = mat(log10(data[:,:4]))
+#N = 2
 
 
 
@@ -72,7 +72,7 @@ def PCA(data_4d, N):
 #3) Take out columns more than S of U
 
 #normalize and remove mean
-data_4d = mat(data[:,:4])
+#data_4d = mat(data[:,:4])
 
 def svd(data_4d, S = 2):
     """
